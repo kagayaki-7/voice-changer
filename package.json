@@ -11,7 +11,7 @@
     "push:docker": "bash script/001_pushDocker.sh",
     "push:docker:trainer": "bash script/002_pushDockerTrainer.sh",
     "push:docker:vcclient": "bash script/003_pushDockerVCClient.sh",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
