@@ -59,7 +59,8 @@ class DDSP_SVC(VoiceChangerModel):
         print("[Voice Changer] [DDSP-SVC] Creating instance ")
         self.voiceChangerType = "DDSP-SVC"
         self.deviceManager = DeviceManager.get_instance()
-        self.gpu_num = torch.cuda.device_count()
+        self.mps_enabled: bool = getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available()
+        self.gpu_num = 1 if self.mps_enabled else 0
         self.params = params
         self.settings = DDSP_SVCSettings()
         self.svc_model: SvcDDSP = SvcDDSP()

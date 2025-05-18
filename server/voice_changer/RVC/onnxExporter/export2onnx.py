@@ -46,23 +46,15 @@ def export2onnx(gpu: int, modelSlot: RVCModelSlot):
         "embOutputLayer": modelSlot.embOutputLayer,
         "useFinalProj": modelSlot.useFinalProj,
     }
-    gpuMomory = DeviceManager.get_instance().getDeviceMemory(gpu)
-    print(f"[Voice Changer] exporting onnx... gpu_id:{gpu} gpu_mem:{gpuMomory}")
-
-    if gpuMomory > 0:
-        _export2onnx(modelFile, output_path, output_path_simple, True, metadata)
-    else:
-        print("[Voice Changer] Warning!!! onnx export with float32. maybe size is doubled.")
-        _export2onnx(modelFile, output_path, output_path_simple, False, metadata)
+    print("[Voice Changer] exporting onnx on CPU")
+    _export2onnx(modelFile, output_path, output_path_simple, metadata)
     return output_file_simple
 
 
-def _export2onnx(input_model, output_model, output_model_simple, is_half, metadata):
+def _export2onnx(input_model, output_model, output_model_simple, metadata):
     cpt = torch.load(input_model, map_location="cpu")
-    if is_half:
-        dev = torch.device("cuda", index=0)
-    else:
-        dev = torch.device("cpu")
+    dev = torch.device("cpu")
+    is_half = False
 
     # EnumInferenceTypesのままだとシリアライズできないのでテキスト化
     if metadata["modelType"] == EnumInferenceTypes.pyTorchRVC.value:

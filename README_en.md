@@ -34,7 +34,7 @@
 - [so-vits-svc](https://github.com/svc-develop-team/so-vits-svc) (only v1)
 - [RVC(Retrieval-based-Voice-Conversion)](https://github.com/liujing04/Retrieval-based-Voice-Conversion-WebUI)
 - [DDSP-SVC](https://github.com/yxlllc/DDSP-SVC) (only v1)
-- [Beatrice JVS Corpus Edition](https://prj-beatrice.com/) * experimental,  (***NOT MIT License*** see [readme](https://github.com/w-okada/voice-changer/blob/master/server/voice_changer/Beatrice/)) *  Only for Windows, CPU dependent (only v1)
+- [Beatrice JVS Corpus Edition](https://prj-beatrice.com/) * experimental,  (***NOT MIT License*** see [readme](https://github.com/w-okada/voice-changer/blob/master/server/voice_changer/Beatrice/))
   - [Beatrice v2](https://prj-beatrice.com/) (only for v2)
 
 1. Distribute the load by running Voice Changer on a different PC
@@ -42,8 +42,8 @@
 
 ![image](https://user-images.githubusercontent.com/48346627/206640768-53f6052d-0a96-403b-a06c-6714a0b7471d.png)
 
-3. Cross-platform compatibility
-   Supports Windows, Mac (including Apple Silicon M1), Linux, and Google Colaboratory.
+3. Platform
+   Supports Mac (Apple Silicon) only.
 ## Related Software
 - [Real-time Voice Changer VCClient](https://github.com/w-okada/voice-changer)
 - [Text-to-Speech Software TTSClient](https://github.com/w-okada/ttsclient)
@@ -67,26 +67,18 @@ It can be used in two main ways, in order of difficulty:
 
 <img src="https://github.com/w-okada/voice-changer/assets/48346627/3f092e2d-6834-42f6-bbfd-7d389111604e" width="400" height="150">
 
-- We offer Windows and Mac versions on [hugging face](https://huggingface.co/wok000/vcclient000/tree/main)
-- v2 for Windows
-  - Please download and use `vcclient_win_std_xxx.zip`. You can perform voice conversion using a reasonably high-performance CPU without a GPU, or by utilizing DirectML to leverage GPUs (AMD, Nvidia). v2 supports both torch and onnx.
-  - If you have an Nvidia GPU, you can achieve faster voice conversion by using `vcclient_win_cuda_xxx.zip`.
-  - v2 for Mac (Apple Silicon)
+- We offer a Mac version on [hugging face](https://huggingface.co/wok000/vcclient000/tree/main)
+- v2 for Mac (Apple Silicon)
     - Please download and use `vcclient_mac_xxx.zip`.
     - To leverage the Apple Silicon GPU, install PyTorch with [MPS support](https://pytorch.org/docs/stable/notes/mps.html) and set the device to `mps` in your Python environment.
     - If CPU usage is high or audio becomes choppy, increase **CHUNK** (e.g. 1024) and set **F0 Det** to `dio` in the GUI.
     - For lower resource usage, you can try the [Light VCClient for Beatrice v2](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main).
-- v1
-  - If you are using a Windows and Nvidia GPU, please download ONNX (cpu, cuda), PyTorch (cpu, cuda).
-  - If you are using a Windows and AMD/Intel GPU, please download ONNX (cpu, DirectML) and PyTorch (cpu, cuda). AMD/Intel GPUs are only enabled for ONNX models.
-  - In either case, for GPU support, PyTorch and Onnxruntime are only enabled if supported.
-  - If you are not using a GPU on Windows, please download ONNX (cpu, cuda) and PyTorch (cpu, cuda).
-
-- For Windows user, after unzipping the downloaded zip file, please run the `start_http.bat` file corresponding to your VC.
+  - v1
+  - Use the CPU versions of ONNX and PyTorch. GPU packages are no longer required.
 
 - For Mac version, after unzipping the downloaded file, double-click the `startHttp.command` file corresponding to your VC. If a message indicating that the developer cannot be verified is displayed, please press the control key and click to run it again (or right-click to run it).
 
-- If you are connecting remotely, please use the `.command` file (Mac) or `.bat` file (Windows) with https instead of http.
+ - If you are connecting remotely, please use the `.command` file with https instead of http.
 
 - The encoder of DDPS-SVC only supports hubert-soft.
 
@@ -94,17 +86,12 @@ It can be used in two main ways, in order of difficulty:
 
 ## (2) Usage after setting up the environment such as Docker or Anaconda
 
-Clone this repository and use it. Setting up WSL2 is essential for Windows. Additionally, setting up virtual environments such as Docker or Anaconda on WSL2 is also required. On Mac, setting up Python virtual environments such as Anaconda is necessary. Although preparation is required, this method works the fastest in many environments. **<font color="red"> Even without a GPU, it may work well enough with a reasonably new CPU </font>(refer to the section on real-time performance below)**.
-
-[Explanation video on installing WSL2 and Docker](https://youtu.be/POo_Cg0eFMU)
-
-[Explanation video on installing WSL2 and Anaconda](https://youtu.be/fba9Zhsukqw)
+Clone this repository and use it. On Mac, setting up Python virtual environments such as Anaconda is necessary. **<font color="red"> Even without a GPU, it may work well enough with a reasonably new CPU </font>(refer to the section on real-time performance below)**.
 
 To run docker, see [start docker](docker_vcclient/README_en.md).
 
 To run on Anaconda venv, see [server developer's guide](README_dev_en.md)
 
-To run on Linux using an AMD GPU, see [setup guide linux](tutorials/tutorial_anaconda_amd_rocm.md)
 
 
 # Software Signing

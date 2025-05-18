@@ -9,7 +9,7 @@ class DiffGtMel:
         if device is not None:
             self.device = device
         else:
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            self.device = "mps" if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available() else "cpu"
         self.model = None
         self.vocoder = None
         self.args = None

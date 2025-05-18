@@ -116,14 +116,10 @@ class VoiceChangerManager(ServerDeviceCallbacks):
             json.dump(self.stored_setting, open(STORED_SETTING_FILE, "w"))
 
     def _get_gpuInfos(self):
-        devCount = torch.cuda.device_count()
-        gpus = []
-        for id in range(devCount):
-            name = torch.cuda.get_device_name(id)
-            memory = torch.cuda.get_device_properties(id).total_memory
-            gpu = {"id": id, "name": name, "memory": memory}
-            gpus.append(gpu)
-        return gpus
+        mps_available = getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available()
+        if mps_available:
+            return [{"id": 0, "name": "Apple MPS", "memory": 0}]
+        return []
 
     @classmethod
     def get_instance(cls, params: VoiceChangerParams):

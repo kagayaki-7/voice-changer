@@ -268,7 +268,7 @@ class F0_Extractor:
         # extract f0 using crepe
         elif self.f0_extractor == 'crepe':
             if device is None:
-                device = 'cuda' if torch.cuda.is_available() else 'cpu'
+                device = 'mps' if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available() else 'cpu'
             resample_kernel = self.resample_kernel.to(device)
             wav16k_torch = resample_kernel(torch.FloatTensor(audio).unsqueeze(0).to(device))
 
@@ -360,7 +360,7 @@ class Units_Encoder:
     def __init__(self, encoder, encoder_ckpt, encoder_sample_rate=16000, encoder_hop_size=320, device=None,
                  cnhubertsoft_gate=10, units_forced_mode='nearest'):
         if device is None:
-            device = 'cuda' if torch.cuda.is_available() else 'cpu'
+            device = 'mps' if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available() else 'cpu'
         self.device = device
 
         if cnhubertsoft_gate is None:

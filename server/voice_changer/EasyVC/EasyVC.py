@@ -298,7 +298,8 @@ class EasyVC(VoiceChangerModel):
             del self.pipeline
             self.pipeline = None
 
-        torch.cuda.empty_cache()
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
         self.initialize()
 
         output_file_simple = export2onnx(self.settings.gpu, modelSlot)

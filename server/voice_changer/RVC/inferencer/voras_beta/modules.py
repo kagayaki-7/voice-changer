@@ -16,7 +16,7 @@ from .transforms import piecewise_rational_quadratic_transform
 LRELU_SLOPE = 0.1
 
 class HarmonicEmbedder(nn.Module):
-    def __init__(self, num_embeddings, embedding_dim, gin_channels, num_head, num_harmonic=0, f0_min=50., f0_max=1100., device="cuda"):
+    def __init__(self, num_embeddings, embedding_dim, gin_channels, num_head, num_harmonic=0, f0_min=50., f0_max=1100., device="cpu"):
         super(HarmonicEmbedder, self).__init__()
         self.embedding_dim = embedding_dim
         self.num_head = num_head

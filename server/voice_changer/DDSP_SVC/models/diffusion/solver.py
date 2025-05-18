@@ -5,8 +5,19 @@ import torch
 import librosa
 from logger.saver import Saver
 from logger import utils
-from torch import autocast
-from torch.cuda.amp import GradScaler
+try:
+    from torch.cuda.amp import autocast, GradScaler
+except Exception:
+    from contextlib import nullcontext as autocast
+    class GradScaler:
+        def __init__(self, *a, **k):
+            pass
+        def scale(self, loss):
+            return loss
+        def step(self, optim):
+            optim.step()
+        def update(self):
+            pass
 
 def test(args, model, vocoder, loader_test, saver):
     print(' [*] testing...')
