@@ -168,7 +168,8 @@ def loadSlotInfo(model_dir: str, slotIndex: int | StaticSlot) -> ModelSlots:
     jsonFile = os.path.join(slotDir, "params.json")
     if not os.path.exists(jsonFile):
         return ModelSlot()
-    jsonDict = json.load(open(jsonFile, encoding="utf-8"))
+    with open(jsonFile, encoding="utf-8") as f:
+        jsonDict = json.load(f)
     slotInfoKey = list(ModelSlot.__annotations__.keys())
     slotInfo = ModelSlot(**{k: v for k, v in jsonDict.items() if k in slotInfoKey})
     if slotInfo.voiceChangerType == "RVC":
@@ -221,4 +222,5 @@ def saveSlotInfo(model_dir: str, slotIndex: int, slotInfo: ModelSlots):
     print("SlotInfo:::", slotInfo)
     slotInfoDict = asdict(slotInfo)
     slotInfo.slotIndex = -1  # スロットインデックスは動的に注入
-    json.dump(slotInfoDict, open(os.path.join(slotDir, "params.json"), "w"), indent=4)
+    with open(os.path.join(slotDir, "params.json"), "w") as f:
+        json.dump(slotInfoDict, f, indent=4)

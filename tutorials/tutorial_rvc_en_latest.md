@@ -38,6 +38,12 @@ It is launched as follows.
 
 - In other words, the key is to run both MMVCServerSIO and startHTTP.command. Moreover, you need to run MMVCServerSIO first.
 
+#### Performance tips on Mac
+
+- Install PyTorch with [MPS support](https://pytorch.org/docs/stable/notes/mps.html) and select the `mps` device to leverage the Apple Silicon GPU.
+- If audio becomes choppy, try increasing **CHUNK** (e.g. 1024) and set **F0 Det** to `dio` in the GUI.
+- A lightweight build is available here: [Light VCClient for Beatrice v2](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main).
+
 If you have the old version, be sure to unzip it into a separate folder.
 
 ### Precautions when connecting remotely

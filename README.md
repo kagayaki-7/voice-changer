@@ -41,6 +41,9 @@ VCClientは、AIを用いてリアルタイム音声変換を行うソフトウ�
 ## ダウンロードと関連リンク
 
 Windows版、 M1 Mac版はhugging faceのリポジトリからダウンロードできます。
+  - Apple Silicon で GPU を利用するには MPS 対応の PyTorch を導入し、Python 環境で `mps` デバイスを指定してください。
+  - CPU 使用率が高い、音声が途切れる場合は **CHUNK** を大きめ (例: 1024) にし、**F0 Det** を `dio` に変更してみてください。
+  - 軽量版クライアントとして [Light VCClient for Beatrice v2](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main) も利用できます。
 
 * [VCClient のリポジトリ](https://huggingface.co/wok000/vcclient000/tree/main)
 * [Light VCClient for Beatrice v2 のリポジトリ](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main)

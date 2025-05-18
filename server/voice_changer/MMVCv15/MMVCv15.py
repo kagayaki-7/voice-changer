@@ -306,9 +306,15 @@ class MMVCv15(VoiceChangerModel):
 
     def _pyTorch_inference(self, data):
         if self.settings.gpu < 0 or self.gpu_num == 0:
-            dev = torch.device("cpu")
+            if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+                dev = torch.device("mps")
+            else:
+                dev = torch.device("cpu")
         else:
-            dev = torch.device("cuda", index=self.settings.gpu)
+            if torch.cuda.is_available():
+                dev = torch.device("cuda", index=self.settings.gpu)
+            else:
+                dev = torch.device("cpu")
 
         with torch.no_grad():
             spec, f0, sid_src = data
