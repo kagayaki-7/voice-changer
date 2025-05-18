@@ -9,6 +9,7 @@ import asyncio
 
 class MMVC_Namespace(socketio.AsyncNamespace):
     sid: int = 0
+    loop: asyncio.AbstractEventLoop | None = None
 
     async def emitTo(self, data):
         timestamp = 0
@@ -19,11 +20,13 @@ class MMVC_Namespace(socketio.AsyncNamespace):
         await self.emit("response", [timestamp, bin, perf], to=self.sid)
 
     def emit_coroutine(self, data):
-        asyncio.run(self.emitTo(data))
+        if self.loop:
+            self.loop.call_soon_threadsafe(asyncio.create_task, self.emitTo(data))
 
     def __init__(self, namespace: str, voiceChangerManager: VoiceChangerManager):
         super().__init__(namespace)
         self.voiceChangerManager = voiceChangerManager
+        self.loop = None
         # self.voiceChangerManager.voiceChanger.emitTo = self.emit_coroutine
         self.voiceChangerManager.setEmitTo(self.emit_coroutine)
 
@@ -33,13 +36,15 @@ class MMVC_Namespace(socketio.AsyncNamespace):
             cls._instance = cls("/test", voiceChangerManager)
         return cls._instance
 
-    def on_connect(self, sid, environ):
+    async def on_connect(self, sid, environ):
         self.sid = sid
+        self.loop = asyncio.get_running_loop()
         print("[{}] connet sid : {}".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), sid))
-        pass
 
     async def on_request_message(self, sid, msg):
         self.sid = sid
+        if self.loop is None:
+            self.loop = asyncio.get_running_loop()
         timestamp = int(msg[0])
         data = msg[1]
         if isinstance(data, str):
