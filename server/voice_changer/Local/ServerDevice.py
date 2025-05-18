@@ -279,14 +279,31 @@ class ServerDevice:
     ###########################################
     def start(self):
         self.currentModelSamplingRate = -1
+        last_config = None
         while True:
             if self.settings.serverAudioStated == 0 or self.settings.serverInputDeviceId == -1:
                 # sd._terminate()
                 # sd._initialize()
                 time.sleep(2)
+                last_config = None
             else:
-                sd._terminate()
-                sd._initialize()
+                config = (
+                    self.settings.serverInputDeviceId,
+                    self.settings.serverOutputDeviceId,
+                    self.settings.serverMonitorDeviceId,
+                    self.settings.serverReadChunkSize,
+                    self.settings.serverAudioSampleRate,
+                )
+                try:
+                    model_sr = self.serverDeviceCallbacks.get_processing_sampling_rate()
+                except Exception:
+                    model_sr = -1
+                config += (model_sr,)
+
+                if config != last_config:
+                    sd._terminate()
+                    sd._initialize()
+                    last_config = config
 
                 # Curret Device ID
                 self.currentServerInputDeviceId = self.settings.serverInputDeviceId
