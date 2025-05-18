@@ -1,22 +1,22 @@
-## For Developper
+## For Developers
 
 [Japanese](/README_dev_ja.md) [Russian](/README_dev_ru.md)
 
-## Prerequisit
+## Prerequisites
 
 - Linux(ubuntu, debian) or WSL2, (not tested for other linux distributions and Mac)
 - Anaconda
 
 ## Preparation
 
-1. Create anaconda virtual environment
+1. Create an Anaconda virtual environment
 
 ```
 $ conda create -n vcclient-dev python=3.10
 $ conda activate vcclient-dev
 ```
 
-2. clone repository
+2. Clone the repository
 
 ```
 $ git clone https://github.com/w-okada/voice-changer.git
@@ -31,9 +31,9 @@ $ cd voice-changer/server
 $ pip install -r requirements.txt
 ```
 
-2. Run server
+2. Run the server
 
-Run server with the below command. You can replace the path to each weight.
+Start the server with the command below. Replace the paths to the model weights as needed.
 
 ```
 $ python3 MMVCServerSIO.py -p 18888 --https true \
@@ -52,31 +52,31 @@ $ python3 MMVCServerSIO.py -p 18888 --https true \
 
 ```
 
-Access with Browser (currently only chrome is supported), then you can see gui.
+Access the displayed URL with a browser (currently only Chrome is supported) to open the GUI.
 
 2-1. Trouble shoot
 
 (1) OSError: PortAudio library not found
-If you get the message below, you shold install additional library.
+If you encounter the message below, you should install additional libraries.
 
 ```
 OSError: PortAudio library not found
 ```
 
-You can install the library this command.
+Install the libraries with the following commands.
 
 ```
 $ sudo apt-get install libportaudio2
 $ sudo apt-get install libasound-dev
 ```
 
-(2) It's not starting up! Damn software!
+(2) It's not starting up!
 
-The client will not start automatically. Please launch your browser and access the URL displayed on the console. And watch your words.
+The client does not start automatically. Launch your browser and open the URL displayed in the console.
 
 (3) Could not load library libcudnn_cnn_infer.so.8
 
-When using WSL, you might encounter a message saying `Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory`. This often happens because the path hasn't been properly set. Please set the path as shown below. It might be handy to add this to your launch script, such as .bashrc.
+When using WSL, you might see `Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory`. This usually means the path isn't set correctly. Set the path as shown below; adding it to your startup script such as `.bashrc` may help.
 
 ```
 export LD_LIBRARY_PATH=/usr/lib/wsl/lib:$LD_LIBRARY_PATH
@@ -98,7 +98,7 @@ use conda to install pytorch
 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
 
-Also run these command.
+Also run these commands.
 
 ```
 pip install chardet
