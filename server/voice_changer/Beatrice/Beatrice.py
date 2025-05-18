@@ -1,4 +1,6 @@
 from data.ModelSlot import BeatriceModelSlot
+import gc
+import torch
 from mods.log_control import VoiceChangaerLogger
 
 from voice_changer.utils.VoiceChangerModel import AudioInOut, VoiceChangerModel
@@ -39,7 +41,15 @@ class Beatrice(VoiceChangerModel):
         raise RuntimeError("not implemented")
 
     def __del__(self):
-        del self.pipeline
+        if hasattr(self, "pipeline"):
+            del self.pipeline
+            self.pipeline = None
+
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+        elif torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        gc.collect()
 
     def get_model_current(self):
         return [
