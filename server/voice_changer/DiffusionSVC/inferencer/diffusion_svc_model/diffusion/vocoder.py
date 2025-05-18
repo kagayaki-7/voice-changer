@@ -7,7 +7,7 @@ from torchaudio.transforms import Resample
 class Vocoder:
     def __init__(self, vocoder_type, vocoder_ckpt, device=None):
         if device is None:
-            device = 'cuda' if torch.cuda.is_available() else 'cpu'
+            device = 'mps' if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available() else 'cpu'
         self.device = device
 
         if vocoder_type == 'nsf-hifigan':
@@ -48,7 +48,7 @@ class NsfHifiGAN(torch.nn.Module):
     def __init__(self, model_path, device=None):
         super().__init__()
         if device is None:
-            device = 'cuda' if torch.cuda.is_available() else 'cpu'
+            device = 'mps' if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available() else 'cpu'
         self.device = device
         self.model_path = model_path
         self.model = None

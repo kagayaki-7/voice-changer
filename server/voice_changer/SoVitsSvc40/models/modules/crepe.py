@@ -261,7 +261,7 @@ class CrepePitchExtractor(BasePitchExtractor):
         self.use_fast_filters = use_fast_filters
         self.hop_length = hop_length
         if device is None:
-            self.dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            self.dev = torch.device("mps" if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available() else "cpu")
         else:
             self.dev = torch.device(device)
         if self.use_fast_filters:

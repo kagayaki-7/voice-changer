@@ -49,6 +49,7 @@ class DiffusionSVC_ONNX:
             spk_mix_dict, spk_emb = self.pre_spk_emb(spk_id, spk_mix_dict, len(units), spk_emb)
         # without speaker encoder
         else:
+            spk_id = torch.LongTensor(np.array([[int(spk_id)]])).to(self.dev)
 
         return out_spec
 

@@ -56,7 +56,8 @@ class MMVCv13(VoiceChangerModel):
         self.net_g = None
         self.onnx_session = None
 
-        self.gpu_num = torch.cuda.device_count()
+        self.mps_enabled: bool = getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available()
+        self.gpu_num = 1 if self.mps_enabled else 0
         self.text_norm = torch.LongTensor([0, 6, 0])
 
         self.audio_buffer: AudioInOut | None = None
@@ -98,24 +99,14 @@ class MMVCv13(VoiceChangerModel):
         print("[Voice Changer] [MMVCv13] Initializing... done")
 
     def getOnnxExecutionProvider(self):
-        availableProviders = onnxruntime.get_available_providers()
-        devNum = torch.cuda.device_count()
-        if (
-            self.settings.gpu >= 0
-            and "CUDAExecutionProvider" in availableProviders
-            and devNum > 0
-        ):
-            return ["CUDAExecutionProvider"], [{"device_id": self.settings.gpu}]
-        elif self.settings.gpu >= 0 and "DmlExecutionProvider" in availableProviders:
-            return ["DmlExecutionProvider"], [{}]
-        else:
-            return ["CPUExecutionProvider"], [
-                {
-                    "intra_op_num_threads": 8,
-                    "execution_mode": onnxruntime.ExecutionMode.ORT_PARALLEL,
-                    "inter_op_num_threads": 8,
-                }
-            ]
+        # Only CPU execution provider is supported
+        return ["CPUExecutionProvider"], [
+            {
+                "intra_op_num_threads": 8,
+                "execution_mode": onnxruntime.ExecutionMode.ORT_PARALLEL,
+                "inter_op_num_threads": 8,
+            }
+        ]
 
     def update_settings(self, key: str, val: int | float | str):
         if key in self.settings.intData:

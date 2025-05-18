@@ -76,7 +76,7 @@ def index_initial(n_batch, n_ch, tensor=True):
     if tensor:
         batch_index = torch.tensor(batch_index)
         ch_index = torch.tensor(ch_index)
-        if torch.cuda.is_available():
-            batch_index = batch_index.cuda()
-            ch_index = ch_index.cuda()
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            batch_index = batch_index.to("mps")
+            ch_index = ch_index.to("mps")
     return batch_index, ch_index
