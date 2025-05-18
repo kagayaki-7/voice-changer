@@ -45,7 +45,7 @@ Windows and M1 Mac versions can be downloaded from the hugging face repository.
 * [VCClient Repository](https://huggingface.co/wok000/vcclient000/tree/main)
 * [Light VCClient for Beatrice v2 Repository](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main)
 
-*1 Please clone the repository for Linux use.
+*1 For Linux, please clone the repository.
 
 ### Related Links
 
@@ -80,9 +80,9 @@ By using it over a network, you can offload the voice conversion load externally
 
 ## Compatible with multiple platforms
 
-Windows, Mac(M1), Linux, Google Colab
+Windows, Mac (M1), Linux, Google Colab
 
-*1 Please clone the repository for Linux use.
+*1 For Linux, please clone the repository.
 
 ## Provides REST API
 
@@ -96,7 +96,7 @@ You can also operate it using HTTP clients built into the OS, such as curl.
 
 ## About Developer Signature
 
-This software is not signed by the developer. A warning will appear as shown below, but you can run it by clicking the icon while holding down the control key. This is due to Apple's security policy. Execution is at your own risk.
+This software is not signed by the developer. macOS may show a warning, but you can run the application by holding the Control key and clicking the icon (or by right-clicking). This is due to Apple's security policy. Use the software at your own risk.
 
 ![image](https://user-images.githubusercontent.com/48346627/212567711-c4a8d599-e24c-4fa3-8145-a5df7211f023.png)
 
@@ -132,7 +132,7 @@ This software is not signed by the developer. A warning will appear as shown bel
 ※鑑賞用の作品として配布・販売していただくことは問題ございません。
 ```
 
-* Regarding the real-time voice changer Amitaro, it complies with the following terms of use of Amitaro's Voice Material Workshop. For details,[here](https://amitaro.net/voice/faq/#index_id6)
+* Regarding the real-time voice changer Amitaro, the following uses are prohibited in accordance with the terms of use of Amitaro's Voice Material Workshop. [Details](https://amitaro.net/voice/faq/#index_id6)
 
 ```
 あみたろの声素材やコーパス読み上げ音声を使って音声モデルを作ったり、ボイスチェンジャーや声質変換などを使用して、自分の声をあみたろの声に変換して使うのもOKです。
@@ -141,7 +141,7 @@ This software is not signed by the developer. A warning will appear as shown bel
 また、あみたろの声で話す内容は声素材の利用規約の範囲内のみとし、センシティブな発言などはしないでください。
 ```
 
-* Regarding the real-time voice changer Koto Mahiro, it complies with the terms of use of Replica Doll. For details,[here](https://kikyohiroto1227.wixsite.com/kikoto-utau/ter%EF%BD%8Ds-of-service)
+* Regarding the real-time voice changer Koto Mahiro, the following uses are prohibited according to the terms of use of Replica Doll. [Details](https://kikyohiroto1227.wixsite.com/kikoto-utau/ter%EF%BD%8Ds-of-service)
 
 ## Disclaimer
 

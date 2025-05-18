@@ -3,8 +3,8 @@
 [Japanese](/README_ja.md) [Korean](/README_ko.md) [Russian](/README_ru.md)
 
 ## What's New!
-- We have released a sister product, the Text To Speech client.
-  - You can enjoy voice generation with a simple interface.
+- We have released a sister product, the Text-to-Speech client.
+  - Voice generation can be enjoyed through a simple interface.
   - For more details, click [here](https://github.com/w-okada/ttsclient).
 - Beatrice V2 Training Code Released!!!
   - [Training Code Repository](https://huggingface.co/fierce-cats/beatrice-trainer)
@@ -28,7 +28,7 @@
 
 # What is VC Client
 
-1. This is a client software for performing real-time voice conversion using various Voice Conversion (VC) AI. The supported AI for voice conversion are as follows.
+1. This software performs real-time voice conversion using several Voice Conversion (VC) AIs. The supported methods are listed below.
 
 - [MMVC](https://github.com/isletennos/MMVC_Trainer) (only v1)
 - [so-vits-svc](https://github.com/svc-develop-team/so-vits-svc) (only v1)
@@ -37,8 +37,8 @@
 - [Beatrice JVS Corpus Edition](https://prj-beatrice.com/) * experimental,  (***NOT MIT License*** see [readme](https://github.com/w-okada/voice-changer/blob/master/server/voice_changer/Beatrice/))
   - [Beatrice v2](https://prj-beatrice.com/) (only for v2)
 
-1. Distribute the load by running Voice Changer on a different PC
-   The real-time voice changer of this application works on a server-client configuration. By running the MMVC server on a separate PC, you can run it while minimizing the impact on other resource-intensive processes such as gaming commentary.
+1. Distribute the processing load by running Voice Changer on another PC.
+   The application works in a server–client configuration. Running the MMVC server on a different machine reduces the impact on resource-intensive tasks such as game streaming.
 
 ![image](https://user-images.githubusercontent.com/48346627/206640768-53f6052d-0a96-403b-a06c-6714a0b7471d.png)
 
@@ -50,9 +50,9 @@
 - [Real-Time Speech Recognition Software ASRClient](https://github.com/w-okada/asrclient)
 # usage
 
-This is an app for performing voice changes with MMVC and so-vits-svc.
+This application performs voice conversion with MMVC and so-vits-svc.
 
-It can be used in two main ways, in order of difficulty:
+You can use it in two primary ways, ordered by difficulty:
 
 - Using a pre-built binary
 - Setting up an environment with Docker or Anaconda and using it
@@ -73,11 +73,8 @@ It can be used in two main ways, in order of difficulty:
     - To leverage the Apple Silicon GPU, install PyTorch with [MPS support](https://pytorch.org/docs/stable/notes/mps.html) and set the device to `mps` in your Python environment.
     - If CPU usage is high or audio becomes choppy, increase **CHUNK** (e.g. 1024) and set **F0 Det** to `dio` in the GUI.
     - For lower resource usage, you can try the [Light VCClient for Beatrice v2](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main).
-  - v1
-  - Use the CPU versions of ONNX and PyTorch. GPU packages are no longer required.
-
-- For Mac version, after unzipping the downloaded file, double-click the `startHttp.command` file corresponding to your VC. If a message indicating that the developer cannot be verified is displayed, please press the control key and click to run it again (or right-click to run it).
-
+- For the Mac version, after unzipping the file, double-click `startHttp.command`. If you see a warning that the developer cannot be verified, hold the Control key and click again (or right-click).
+- If connecting remotely, use the `.command` file (Mac) with HTTPS instead of HTTP.
  - If you are connecting remotely, please use the `.command` file with https instead of http.
 
 - The encoder of DDPS-SVC only supports hubert-soft.
@@ -93,10 +90,9 @@ To run docker, see [start docker](docker_vcclient/README_en.md).
 To run on Anaconda venv, see [server developer's guide](README_dev_en.md)
 
 
-
 # Software Signing
 
-This software is not signed by the developer. A warning message will appear, but you can run the software by clicking the icon while holding down the control key. This is due to Apple's security policy. Running the software is at your own risk.
+This software is not signed by the developer. macOS may display a warning, but you can run the application by holding the Control key and clicking the icon (or by right-clicking). This behavior is due to Apple's security policy. Use the software at your own risk.
 
 ![image](https://user-images.githubusercontent.com/48346627/212567711-c4a8d599-e24c-4fa3-8145-a5df7211f023.png)
 
@@ -132,9 +128,9 @@ In accordance with the Tsukuyomi-chan Corpus Terms of Use for the Tsukuyomi-chan
 - Publicly disclosing secondary use (use as materials) for others.
   (Distributing or selling as a work for viewing is not a problem.)
 
-Regarding the Real-time Voice Changer Amitaro, we prohibit the following uses in accordance with the terms of use of the Amitaro's koe-sozai kobo.[detail](https://amitaro.net/voice/faq/#index_id6)
+Regarding the Real-time Voice Changer Amitaro, the following uses are prohibited in accordance with the terms of use of Amitaro's koe-sozai kobo. [Details](https://amitaro.net/voice/faq/#index_id6)
 
-Regarding the Real-time Voice Changer Kikoto Mahiro, we prohibit the following uses in accordance with the terms of use of Replica doll.[detail](https://kikyohiroto1227.wixsite.com/kikoto-utau/ter%EF%BD%8Ds-of-service)
+Regarding the Real-time Voice Changer Kikoto Mahiro, the following uses are prohibited in accordance with the terms of use of Replica Doll. [Details](https://kikyohiroto1227.wixsite.com/kikoto-utau/ter%EF%BD%8Ds-of-service)
 
 # Disclaimer
 
