@@ -65,8 +65,11 @@
 - v2 для Windows
   - Пожалуйста, скачайте и используйте `vcclient_win_std_xxx.zip`. Преобразование голоса можно выполнять с использованием мощного процессора без GPU или с использованием DirectML для GPU (AMD, Nvidia). v2 поддерживает как torch, так и onnx.
   - Если у вас Nvidia GPU, скачайте `vcclient_win_cuda_xxx.zip` для более быстрого преобразования.
-- v2 для Mac (Apple Silicon)
-  - Пожалуйста, скачайте и используйте `vcclient_mac_xxx.zip`.
+  - v2 для Mac (Apple Silicon)
+    - Пожалуйста, скачайте и используйте `vcclient_mac_xxx.zip`.
+    - Чтобы использовать GPU Apple Silicon, установите PyTorch с поддержкой MPS и укажите устройство `mps` в вашей среде Python.
+    - При высокой нагрузке или если звук прерывается, увеличьте **CHUNK** (например, 1024) и выберите `dio` для **F0 Det**.
+    - Для слабых компьютеров доступен облегчённый [Light VCClient for Beatrice v2](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main).
 - v1
   - Для Windows с Nvidia GPU скачайте ONNX (cpu, cuda), PyTorch (cpu, cuda).
   - Для Windows с AMD/Intel GPU скачайте ONNX (cpu, DirectML) и PyTorch (cpu, cuda). AMD/Intel GPU поддерживаются только для ONNX моделей.
