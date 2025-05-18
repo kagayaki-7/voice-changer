@@ -72,8 +72,11 @@
 - Windows용 v2
   - `vcclient_win_std_xxx.zip`를 다운로드하여 사용하세요. GPU를 사용하지 않고도 (어느 정도 고성능의) CPU를 사용한 음성 변환이나, DirectML을 사용해 GPU(AMD, Nvidia)를 활용한 음성 변환이 가능합니다. v2에서는 torch와 onnx 모두를 지원합니다.
   - Nvidia GPU를 가지고 계신 분들은 `vcclient_win_cuda_xxx.zip`를 사용하시면 더 빠른 음성 변환이 가능합니다.
-- Mac (Apple Silicon)용 v2
-  - `vcclient_mac_xxx.zip`를 다운로드하여 사용하세요.
+  - Mac (Apple Silicon)용 v2
+    - `vcclient_mac_xxx.zip`를 다운로드하여 사용하세요.
+    - Apple Silicon GPU를 사용하려면 MPS를 지원하는 PyTorch를 설치하고 Python 환경에서 `mps` 장치를 사용하도록 설정하세요.
+    - CPU 사용률이 높거나 소리가 끊길 경우 **CHUNK** 값을 크게(예: 1024) 하고 **F0 Det**을 `dio`로 변경해 보세요.
+    - 보다 가벼운 클라이언트가 필요하면 [Light VCClient for Beatrice v2](https://huggingface.co/wok000/light_vcclient_beatrice/tree/main)를 사용해 보세요.
 - v1
   - Windows와 NVIDIA GPU를 사용하는 분은 ONNX(cpu, cuda), PyTorch(cpu, cuda)를 다운로드하세요.
   - Windows와 AMD/Intel GPU를 사용하는 분은 ONNX(cpu, DirectML), PyTorch(cpu, cuda)를 다운로드하세요 AMD/Intel GPU는 ONNX 모델을 사용할 때만 적용됩니다.
