@@ -3,7 +3,10 @@ from typing import Any
 import math
 import torch
 import torch.nn.functional as F
-from torch.cuda.amp import autocast
+try:
+    from torch.cuda.amp import autocast
+except Exception:
+    from contextlib import nullcontext as autocast
 from Exceptions import (
     DeviceCannotSupportHalfPrecisionException,
     DeviceChangingException,

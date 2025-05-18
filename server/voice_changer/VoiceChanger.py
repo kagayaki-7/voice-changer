@@ -76,9 +76,9 @@ class VoiceChanger(VoiceChangerIF):
 
         self.voiceChanger: VoiceChangerModel | None = None
         self.params = params
-        self.gpu_num = torch.cuda.device_count()
-        self.prev_audio = np.zeros(4096)
         self.mps_enabled: bool = getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available()
+        self.gpu_num = 1 if self.mps_enabled else 0
+        self.prev_audio = np.zeros(4096)
         self.onnx_device = onnxruntime.get_device()
 
         logger.info(f"VoiceChanger Initialized (GPU_NUM(cuda):{self.gpu_num}, mps_enabled:{self.mps_enabled}, onnx_device:{self.onnx_device})")
