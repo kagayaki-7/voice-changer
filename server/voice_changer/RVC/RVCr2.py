@@ -3,6 +3,7 @@ VoiceChangerV2向け
 """
 
 from dataclasses import asdict
+import gc
 import numpy as np
 import torch
 from data.ModelSlot import RVCModelSlot
@@ -264,7 +265,15 @@ class RVCr2(VoiceChangerModel):
         return
 
     def __del__(self):
-        del self.pipeline
+        if hasattr(self, "pipeline"):
+            del self.pipeline
+            self.pipeline = None
+
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+        elif torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        gc.collect()
 
         # print("---------- REMOVING ---------------")
 

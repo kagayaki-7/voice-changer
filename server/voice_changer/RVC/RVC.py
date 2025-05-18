@@ -1,4 +1,5 @@
 from dataclasses import asdict
+import gc
 import numpy as np
 import torch
 import torchaudio
@@ -168,21 +169,7 @@ class RVC(VoiceChangerModel):
         useFinalProj = self.slotInfo.useFinalProj
 
         try:
-            audio_out, self.pitchf_buffer, self.feature_buffer = self.pipeline.exec(
-                sid,
-                audio,
-                pitchf,
-                feature,
-                f0_up_key,
-                index_rate,
-                if_f0,
-                self.settings.extraConvertSize / self.slotInfo.samplingRate if self.settings.silenceFront else 0.,  # extaraDataSizeの秒数。RVCのモデルのサンプリングレートで処理(★１)。
-                embOutputLayer,
-                useFinalProj,
-                repeat,
-                protect,
-                outSize
-            )
+            audio_out, self.pitchf_buffer, self.feature_buffer = self.pipeline.exec(sid, audio, pitchf, feature, f0_up_key, index_rate, if_f0, self.settings.extraConvertSize / self.slotInfo.samplingRate if self.settings.silenceFront else 0.0, embOutputLayer, useFinalProj, repeat, protect, outSize)  # extaraDataSizeの秒数。RVCのモデルのサンプリングレートで処理(★１)。
             result = audio_out.detach().cpu().numpy() * np.sqrt(vol)
 
             return result
@@ -195,7 +182,15 @@ class RVC(VoiceChangerModel):
         return
 
     def __del__(self):
-        del self.pipeline
+        if hasattr(self, "pipeline"):
+            del self.pipeline
+            self.pipeline = None
+
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+        elif torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        gc.collect()
 
         # print("---------- REMOVING ---------------")
 

@@ -17,6 +17,7 @@ else:
     sys.path.append("so-vits-svc-40")
 
 from dataclasses import dataclass, asdict, field
+import gc
 import numpy as np
 import torch
 import onnxruntime
@@ -99,12 +100,8 @@ class SoVitsSvc40(VoiceChangerModel):
     def initialize(self):
         print("[Voice Changer] [so-vits-svc40] Initializing... ")
         vcparams = VoiceChangerParamsManager.get_instance().params
-        configPath = os.path.join(
-            vcparams.model_dir, str(self.slotInfo.slotIndex), self.slotInfo.configFile
-        )
-        modelPath = os.path.join(
-            vcparams.model_dir, str(self.slotInfo.slotIndex), self.slotInfo.modelFile
-        )
+        configPath = os.path.join(vcparams.model_dir, str(self.slotInfo.slotIndex), self.slotInfo.configFile)
+        modelPath = os.path.join(vcparams.model_dir, str(self.slotInfo.slotIndex), self.slotInfo.modelFile)
         self.hps = get_hparams_from_file(configPath)
         self.settings.speakers = self.hps.spk
 
@@ -180,9 +177,7 @@ class SoVitsSvc40(VoiceChangerModel):
     def get_info(self):
         data = asdict(self.settings)
 
-        data["onnxExecutionProviders"] = (
-            self.onnx_session.get_providers() if self.onnx_session is not None else []
-        )
+        data["onnxExecutionProviders"] = self.onnx_session.get_providers() if self.onnx_session is not None else []
 
         return data
 
@@ -208,9 +203,7 @@ class SoVitsSvc40(VoiceChangerModel):
             )
 
         if wav_44k.shape[0] % self.hps.data.hop_length != 0:
-            print(
-                f" !!! !!! !!! wav size not multiple of hopsize: {wav_44k.shape[0] / self.hps.data.hop_length}"
-            )
+            print(f" !!! !!! !!! wav size not multiple of hopsize: {wav_44k.shape[0] / self.hps.data.hop_length}")
 
         f0, uv = interpolate_f0(f0)
         f0 = torch.FloatTensor(f0)
@@ -219,9 +212,7 @@ class SoVitsSvc40(VoiceChangerModel):
         f0 = f0.unsqueeze(0)
         uv = uv.unsqueeze(0)
 
-        wav16k_numpy = librosa.resample(
-            audio_buffer, orig_sr=self.hps.data.sampling_rate, target_sr=16000
-        )
+        wav16k_numpy = librosa.resample(audio_buffer, orig_sr=self.hps.data.sampling_rate, target_sr=16000)
         wav16k_tensor = torch.from_numpy(wav16k_numpy)
 
         if (self.settings.gpu < 0 or self.gpu_num == 0) or self.slotInfo.isONNX:
@@ -242,9 +233,7 @@ class SoVitsSvc40(VoiceChangerModel):
             if self.hps.model.ssl_dim == 768:
                 self.hubert_model = self.hubert_model.to(dev)
                 wav16k_tensor = wav16k_tensor.to(dev)
-                c = get_hubert_content_layer9(
-                    self.hubert_model, wav_16k_tensor=wav16k_tensor
-                )
+                c = get_hubert_content_layer9(self.hubert_model, wav_16k_tensor=wav16k_tensor)
             else:
                 self.hubert_model = self.hubert_model.to(dev)
                 wav16k_tensor = wav16k_tensor.to(dev)
@@ -255,29 +244,16 @@ class SoVitsSvc40(VoiceChangerModel):
 
         c = repeat_expand_2d(c.squeeze(0), f0.shape[1])
 
-        if (
-            self.settings.clusterInferRatio != 0
-            and hasattr(self, "cluster_model")
-            and self.cluster_model is not None
-        ):
-            speaker = [
-                key
-                for key, value in self.settings.speakers.items()
-                if value == self.settings.dstId
-            ]
+        if self.settings.clusterInferRatio != 0 and hasattr(self, "cluster_model") and self.cluster_model is not None:
+            speaker = [key for key, value in self.settings.speakers.items() if value == self.settings.dstId]
             if len(speaker) != 1:
                 pass
                 # print("not only one speaker found.", speaker)
             else:
-                cluster_c = get_cluster_center_result(
-                    self.cluster_model, c.cpu().numpy().T, speaker[0]
-                ).T
+                cluster_c = get_cluster_center_result(self.cluster_model, c.cpu().numpy().T, speaker[0]).T
                 cluster_c = torch.FloatTensor(cluster_c).to(dev)
                 c = c.to(dev)
-                c = (
-                    self.settings.clusterInferRatio * cluster_c
-                    + (1 - self.settings.clusterInferRatio) * c
-                )
+                c = self.settings.clusterInferRatio * cluster_c + (1 - self.settings.clusterInferRatio) * c
 
         c = c.unsqueeze(0)
         return c, f0, uv
@@ -292,20 +268,14 @@ class SoVitsSvc40(VoiceChangerModel):
         newData = newData.astype(np.float32) / self.hps.data.max_wav_value
 
         if self.audio_buffer is not None:
-            self.audio_buffer = np.concatenate(
-                [self.audio_buffer, newData], 0
-            )  # 過去のデータに連結
+            self.audio_buffer = np.concatenate([self.audio_buffer, newData], 0)  # 過去のデータに連結
         else:
             self.audio_buffer = newData
 
-        convertSize = (
-            inputSize + crossfadeSize + solaSearchFrame + self.settings.extraConvertSize
-        )
+        convertSize = inputSize + crossfadeSize + solaSearchFrame + self.settings.extraConvertSize
 
         if convertSize % self.hps.data.hop_length != 0:  # モデルの出力のホップサイズで切り捨てが発生するので補う。
-            convertSize = convertSize + (
-                self.hps.data.hop_length - (convertSize % self.hps.data.hop_length)
-            )
+            convertSize = convertSize + (self.hps.data.hop_length - (convertSize % self.hps.data.hop_length))
 
         convertOffset = -1 * convertSize
         self.audio_buffer = self.audio_buffer[convertOffset:]  # 変換対象の部分だけ抽出
@@ -343,9 +313,7 @@ class SoVitsSvc40(VoiceChangerModel):
                     "f0": f0.astype(np.float32),
                     "uv": uv.astype(np.float32),
                     "g": sid_target.astype(np.int64),
-                    "noise_scale": np.array([self.settings.noiseScale]).astype(
-                        np.float32
-                    ),
+                    "noise_scale": np.array([self.settings.noiseScale]).astype(np.float32),
                     # "predict_f0": np.array([self.settings.dstId]).astype(np.int64),
                 },
             )[0][0, 0]
@@ -408,8 +376,12 @@ class SoVitsSvc40(VoiceChangerModel):
         return audio
 
     def __del__(self):
-        del self.net_g
-        del self.onnx_session
+        if hasattr(self, "net_g"):
+            del self.net_g
+            self.net_g = None
+        if hasattr(self, "onnx_session"):
+            del self.onnx_session
+            self.onnx_session = None
         remove_path = os.path.join("so-vits-svc-40")
         sys.path = [x for x in sys.path if x.endswith(remove_path) is False]
 
@@ -422,6 +394,12 @@ class SoVitsSvc40(VoiceChangerModel):
                     sys.modules.pop(key)
             except Exception:  # type:ignore
                 pass
+
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+        elif torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        gc.collect()
 
     def get_model_current(self):
         return []
